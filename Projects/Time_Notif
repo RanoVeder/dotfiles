@@ -1,0 +1,8 @@
+#!/bin/bash
+
+dateN=$(date | awk -F'[ ]' '{print $1}')
+dateM=$(date | awk -F'[ ]' '{print $2}')
+dateD=$(date | awk -F'[ ]' '{print $3}')
+time=$(date | awk -F'[ ]' '{print $4}' | awk -F'[:]' '{print $1 ":" $2}')
+
+(echo -e "%{c}$dateN $dateD $dateM $time"; sleep 5) | lemonbar -d -g  120x40+1730+30 -B '#FF655057'

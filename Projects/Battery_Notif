@@ -1,0 +1,24 @@
+#!/bin/sh
+check="n"
+while true; do
+  result=$(acpi -b | awk -F'[,:%]' '{print $3}')
+  battery=$(acpi -b | awk -F'[,:%]' '{print $2}')
+  resultf=$(($result%10))
+  if [ "$result" -le "10" ] && [ "$check" == "n" ]; then
+    $(hsetroot -fill ~/images/wallpaper_10.png)
+    check="y"
+  elif [ "$result" -ge "10" ] && [ "$check" == "y" ]; then
+    $(hsetroot -fill ~/images/wallpaper.png)
+    check="n"
+  fi
+
+  if [ "$resultf" == "0" ] && [ "$battery" == " Discharging" ]; then
+    (echo "%{c}$result% Battery Left"; sleep 15) | lemonbar -d -g  150x50+1700+20 -B '#FF655057'
+    sleep 120
+  elif [ "$resultf" == "0" ] && [ "$battery" == " Charging" ]; then
+    (echo "%{c}$result% Battery Charging"; sleep 15) | lemonbar -d -g  150x50+1700+20 -B '#FF655057'
+    sleep 120
+  else
+    sleep 5
+  fi
+done
